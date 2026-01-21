@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
+import { db } from '../firebase';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 
 interface FormData {
     name: string;
@@ -25,6 +27,8 @@ const AttendanceForm = ({ onRegistration }: AttendanceFormProps) => {
     });
 
     const [showPreview, setShowPreview] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const [successMessage, setSuccessMessage] = useState('');
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
@@ -91,6 +95,37 @@ const AttendanceForm = ({ onRegistration }: AttendanceFormProps) => {
             };
             const englishDistrictName = districtMapping[formData.district] || formData.district;
             onRegistration(englishDistrictName);
+            
+            // Save to Firestore
+            saveToFirestore(englishDistrictName);
+        }
+    };
+
+    const saveToFirestore = async (englishDistrictName: string) => {
+        setIsLoading(true);
+        try {
+            const registrationData = {
+                name: formData.name,
+                email: formData.email,
+                phone: formData.phone,
+                district: formData.district,
+                districtEnglish: englishDistrictName,
+                memberId: formData.memberId,
+                // photoUrl: formData.photoUrl, // Stores as base64
+                // registeredAt: serverTimestamp(),
+            };
+
+            const docRef = await addDoc(collection(db, 'registrations'), registrationData);
+            console.log('Registration saved with ID:', docRef.id);
+            setSuccessMessage('✓ Your registration has been saved successfully!');
+            
+            // Clear success message after 3 seconds
+            setTimeout(() => setSuccessMessage(''), 3000);
+        } catch (error) {
+            console.error('Error saving registration:', error);
+            alert('Error saving registration. Please try again.');
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -162,6 +197,16 @@ const AttendanceForm = ({ onRegistration }: AttendanceFormProps) => {
 
     return (
         <div className="max-w-2xl mx-auto mt-0 pt-0">
+            {successMessage && (
+                <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0 }}
+                    className="mb-4 p-3 bg-green-500 text-white rounded-lg text-center font-semibold"
+                >
+                    {successMessage}
+                </motion.div>
+            )}
             <motion.form
                 onSubmit={handleSubmit}
                 viewport={{ once: true }}
@@ -299,8 +344,9 @@ const AttendanceForm = ({ onRegistration }: AttendanceFormProps) => {
 
                     <button
                         type="submit"
-                        className="w-full bg-yellow-400 hover:bg-yellow-300 text-red-700 font-bolds font-bold py-3 px-4 rounded-lg transition-all duration-300 transform hover:scale-105">
-                        பதிவு செய்க
+                        disabled={isLoading}
+                        className="w-full bg-yellow-400 hover:bg-yellow-300 disabled:bg-gray-400 disabled:cursor-not-allowed text-red-700 font-bolds font-bold py-3 px-4 rounded-lg transition-all duration-300 transform hover:scale-105">
+                        {isLoading ? 'Saving...' : 'பதிவு செய்க'}
                     </button>
                 </div>
             </motion.form>

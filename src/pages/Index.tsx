@@ -1,8 +1,10 @@
+// import VideoPromo from "@/components/VideoPromo";
 import HeroSection from "@/components/HeroSection";
 import AttendanceForm from "@/components/AttendanceForm";
 import LocationSection from "@/components/LocationSection";
 import UpdatesSection from "@/components/UpdatesSection";
 import TamilNaduMap from "@/components/TamilNaduMap";
+import Footer from "@/components/Footer";
 import { motion } from "framer-motion";
 import { useState } from "react";
 
@@ -65,6 +67,9 @@ const Index = () => {
 
     return (
         <div className="min-h-screen bg-background">
+            {/* Video Promo Section 
+            <VideoPromo />*/}
+            
             {/* Hero Section */}
             <HeroSection />
 
@@ -96,7 +101,9 @@ const Index = () => {
             <section id="location" className="py-6 md:py-1" style={{ backgroundColor: '#ed1c24' }}>
                 <LocationSection />
             </section>
+            
             {/* Footer */}
+            <Footer />
         </div>
     );
 };
