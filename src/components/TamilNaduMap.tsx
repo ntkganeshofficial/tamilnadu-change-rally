@@ -62,8 +62,8 @@ const TamilNaduMap = ({ districts }: TamilNaduMapProps) => {
                                     whileHover={{ x: 2 }}
                                     onClick={() => setSelectedDistrict(selectedDistrict === district.name ? null : district.name)}
                                     className={`w-full text-left p-2 rounded text-xs transition-all font-fredoka whitespace-nowrap ${selectedDistrict === district.name
-                                            ? 'bg-red-600 text-white shadow-lg'
-                                            : 'bg-gray-100 hover:bg-red-50'
+                                        ? 'bg-red-600 text-white shadow-lg'
+                                        : 'bg-gray-100 hover:bg-red-50'
                                         }`}
                                 >
                                     <div className="flex justify-between items-start">
@@ -104,40 +104,6 @@ const TamilNaduMap = ({ districts }: TamilNaduMapProps) => {
                         </div>
                     </div>
                 </motion.div>
-
-                {/* Selected District Info 
-        {selectedDistrict && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="mt-4 bg-gradient-to-r from-red-600 to-red-700 rounded-xl shadow-lg p-6 text-white"
-            >
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div>
-                  <div className="text-sm font-fredoka opacity-80 mb-2">தேர்ந்தெடுக்கப்பட்ட மாவட்டம்</div>
-                  <div className="text-3xl font-bold font-tamil">
-                    {districts.find((d) => d.name === selectedDistrict)?.tamil}
-                  </div>
-                  <div className="text-sm opacity-75 mt-1">{selectedDistrict}</div>
-                </div>
-                <div>
-                  <div className="text-sm font-fredoka opacity-80 mb-2">மொத்த பதிவுகள்</div>
-                  <div className="text-3xl font-bold">
-                    {districts.find((d) => d.name === selectedDistrict)?.registrations.toLocaleString()}
-                  </div>
-                </div>
-                <div>
-                  <div className="text-sm font-fredoka opacity-80 mb-2">நிலை</div>
-                  <div className="text-3xl font-bold font-tamil">
-                    {(() => {
-                      const regs = districts.find((d) => d.name === selectedDistrict)?.registrations || 0;
-                      return regs > 2000 ? 'முதல்' : regs > 1000 ? 'இரண்டாம்' : 'மூன்றாம்';
-                    })()}
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-        )}*/}
 
                 {/* Selected District Details */}
                 {selectedDistrict && (

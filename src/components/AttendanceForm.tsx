@@ -54,15 +54,17 @@ const AttendanceForm = ({ onRegistration }: AttendanceFormProps) => {
             const districtMapping: { [key: string]: string } = {
                 'அரியலூர்': 'Ariyalur',
                 'செங்கல்பட்டு': 'Chengalpattu',
+                'சென்னை': 'Chennai',
                 'கோயம்பத்தூர்': 'Coimbatore',
                 'கடலூர்': 'Cuddalore',
                 'தர்மபுரி': 'Dharmapuri',
                 'திண்டுக்கல்': 'Dindigul',
                 'ஈரோடு': 'Erode',
                 'காஞ்சிபுரம்': 'Kancheepuram',
-                'கன்னியாகுமரி': 'Kanyakumari',
+                'கண்ணியாகுமரி': 'Kannyakumari',
+                'கள்ளக்குறிச்சி': 'Kallakurichi',
                 'கரூர்': 'Karur',
-                'கிருஷ்ணாகிரி': 'Krishnagiri',
+                'கிருஷ்ணகிரி': 'Krishnagiri',
                 'மதுரை': 'Madurai',
                 'மயிலாடுதுறை': 'Mayiladuthurai',
                 'நாகப்பட்டிணம்': 'Nagapattinam',
@@ -85,7 +87,7 @@ const AttendanceForm = ({ onRegistration }: AttendanceFormProps) => {
                 'திருச்சிராப்பள்ளி': 'Tiruchirappalli',
                 'வேலூர்': 'Vellore',
                 'விழுப்புரம்': 'Villupuram',
-                'விருத்துநாகர்': 'Virudhunagar',
+                'விருதுநகர்': 'Virudhunagar',
             };
             const englishDistrictName = districtMapping[formData.district] || formData.district;
             onRegistration(englishDistrictName);
@@ -264,7 +266,7 @@ const AttendanceForm = ({ onRegistration }: AttendanceFormProps) => {
                             <option value="தர்மபுரி">தர்மபுரி</option>
                             <option value="திண்டுக்கல்">திண்டுக்கல்</option>
                             <option value="ஈரோடு">ஈரோடு</option>
-                            <option value="கள்ள்க்குறிச்சி">கள்ள்க்குறிச்சி</option>
+                            <option value="கள்ளக்குறிச்சி">கள்ளக்குறிச்சி</option>
                             <option value="காஞ்சிபுரம்">காஞ்சிபுரம்</option>
                             <option value="கன்னியாகுமரி">கன்னியாகுமரி</option>
                             <option value="கரூர்">கரூர்</option>
@@ -278,6 +280,7 @@ const AttendanceForm = ({ onRegistration }: AttendanceFormProps) => {
                             <option value="புதுச்சேரி">புதுச்சேரி</option>
                             <option value="ராமநாதபுரம்">ராமநாதபுரம்</option>
                             <option value="ராணிப்பேட்டை">ராணிப்பேட்டை</option>
+                            <option value="சென்னை">சென்னை</option>
                             <option value="சேலம்">சேலம்</option>
                             <option value="சிவகங்கை">சிவகங்கை</option>
                             <option value="தென்காசி">தென்காசி</option>
