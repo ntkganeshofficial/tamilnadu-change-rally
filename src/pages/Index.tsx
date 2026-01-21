@@ -53,7 +53,6 @@ const Index = () => {
     ];
 
     const [districts, setDistricts] = useState<District[]>(initialDistricts);
-
     const handleRegistration = (districtName: string) => {
         setDistricts(prevDistricts =>
             prevDistricts.map(district =>
@@ -78,9 +77,7 @@ const Index = () => {
                         viewport={{ once: true }}
                         className="text-center mb-12"
                     >
-
                     </motion.div>
-
                     <AttendanceForm onRegistration={handleRegistration} />
                 </div>
             </section>
