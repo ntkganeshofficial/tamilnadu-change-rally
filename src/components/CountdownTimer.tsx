@@ -55,7 +55,7 @@ const CountdownTimer = () => {
 
     const TimeUnit = ({ value, label, tamilLabel }: { value: number; label: string; tamilLabel: string }) => (
         <div className="flex flex-col items-center">
-            <div className="bg-red-700/50 border-2 border-red-500 rounded-xl p-4 md:p-6 min-w-24 md:min-w-32">
+            <div className="bg-red-700/50 border-2 border-red-500 rounded-xl p-4 md:p-6 min-w-24 md:min-w-32 flex items-center justify-center">
                 <div className="text-4xl md:text-6xl font-bold text-yellow-400 font-tamil">
                     {String(value).padStart(2, '0')}
                 </div>
