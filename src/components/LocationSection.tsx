@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 
 const LocationSection = () => {
     return (
-        <section className="py-1 md:py-20" style={{ backgroundColor: '#ed1c24' }}>
+        <section className="py-6 md:py-20" style={{ backgroundColor: '#ed1c24' }}>
             <div className="container mx-auto px-4">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
@@ -15,7 +15,7 @@ const LocationSection = () => {
                     </h2>
                 </motion.div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
                     <motion.div
                         initial={{ opacity: 0, x: -20 }}
                         whileInView={{ opacity: 1, x: 0 }}

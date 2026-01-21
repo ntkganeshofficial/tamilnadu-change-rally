@@ -69,7 +69,7 @@ const Index = () => {
             <HeroSection />
 
             {/* Registration Section */}
-            <section id="attendance-form" className="md:py-1" style={{ backgroundColor: '#ed1c24' }}>
+            <section id="attendance-form" className="py-6 md:py-1" style={{ backgroundColor: '#ed1c24' }}>
                 <div className="container mx-auto px-4">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
@@ -88,10 +88,12 @@ const Index = () => {
             </section>
 
             {/* Updates Section */}
-            <UpdatesSection />
+            <section className="py-6 md:py-1" style={{ backgroundColor: '#ed1c24' }}>
+                <UpdatesSection />
+            </section>
 
             {/* Location Section */}
-            <section id="location">
+            <section id="location" className="py-6 md:py-1" style={{ backgroundColor: '#ed1c24' }}>
                 <LocationSection />
             </section>
             {/* Footer */}

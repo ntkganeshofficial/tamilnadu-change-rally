@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 
 const HeroSection = () => {
     const [showImage, setShowImage] = useState(true);
+    const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -15,19 +16,27 @@ const HeroSection = () => {
             }
         };
 
+        const handleResize = () => {
+            setIsMobile(window.innerWidth < 768);
+        };
+
         window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
+        window.addEventListener('resize', handleResize);
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+            window.removeEventListener('resize', handleResize);
+        };
     }, []);
 
     return (
         <>
-            <section className="relative w-full h-80 flex flex-col items-center justify-center overflow-visible" style={{ backgroundColor: '#ed1c24', backgroundImage: 'url(/maanaadu-2026-logo-final.png)', backgroundSize: '26%', backgroundRepeat: 'no-repeat', backgroundPosition: 'center' }}>
+            <section className="relative w-full h-80 flex flex-col items-center justify-center overflow-visible" style={{ backgroundColor: '#ed1c24', backgroundImage: `url(/${isMobile ? 'maanaadu-2026-logo-final-1024.png' : 'maanaadu-2026-logo-final.png'})`, backgroundSize: isMobile ? '95%' : '26%', backgroundRepeat: 'no-repeat', backgroundPosition: 'center' }}>
                 {/* Right Side Image - Half in Hero, Half in Timer */}
                 {showImage && (
                     <img
                         src="/annan-may-18-kovai-full-standing-hand-raising.png"
                         alt="Annan"
-                        className="fixed right-10 top-0 h-screen object-cover pointer-events-none z-10"
+                        className="fixed right-10 top-0 h-screen object-cover pointer-events-none z-10 hidden md:block"
                         style={{ height: '38rem' }}
                     />
                 )}
