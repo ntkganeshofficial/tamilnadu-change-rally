@@ -1,0 +1,84 @@
+@import url('https://fonts.googleapis.com/css2?family=Baloo+Thambi+2:wght@400;500;600;700;800&family=Anek+Tamil:wght@400;500;600;700;800&family=Fredoka:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Theme colors based on naamtamilar.org */
+  --background: 0 0% 100%;
+  --foreground: 0 0% 3.6%;
+  --primary: 0 85% 49%;
+  /* #ce1212 */
+  --primary-light: 0 85% 59%;
+  --primary-dark: 359 76% 35%;
+  /* #810000 */
+  --primary-foreground: 0 0% 100%;
+  --secondary: 0 75% 90%;
+  /* Lighter red */
+  --secondary-foreground: 0 0% 3.6%;
+  --muted: 0 0% 89.8%;
+  --muted-foreground: 0 0% 45.1%;
+  --accent: 0 85% 49%;
+  /* #ce1212 */
+  --accent-foreground: 0 0% 100%;
+  --header-color: 359 76% 27%;
+  /* #810000 */
+  --mobile-menu-color: 0 90% 56%;
+  /* #dd3333 */
+  --td_default_google_font_2: "Anek Tamil";
+}
+
+/* hsl(358.26deg 85.89% 52.75%) */
+
+body {
+  color: hsl(var(--foreground));
+  background-color: hsl(var(--background));
+  font-family: 'Baloo Thambi 2', 'Anek Tamil', 'Fredoka', 'Noto Sans Tamil', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Tamil Typography */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: 'Baloo Thambi 2', 'Anek Tamil', 'Fredoka', sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+h1 {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  line-height: 1.1;
+}
+
+h2 {
+  font-size: clamp(1.75rem, 4vw, 3rem);
+  line-height: 1.2;
+}
+
+/* Button Styles */
+button {
+  font-family: 'Fredoka', sans-serif;
+  transition: all 0.3s ease;
+}
+
+.w-24 {
+  width: 6.1rem;
+}
+
+.h-25 {
+  height: 7.1rem;
+}
