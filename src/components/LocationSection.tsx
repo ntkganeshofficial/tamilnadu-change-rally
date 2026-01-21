@@ -32,7 +32,7 @@ const LocationSection = () => {
                             No. 100, Pantheon Road, Egmore, Chennai - 600008
                         </p>
                         <p className="text-foreground/70">
-                            Contact: +91 XXXX XXX XXX
+                            Contact: +91 99416 94861
                         </p>
                     </motion.div>
 

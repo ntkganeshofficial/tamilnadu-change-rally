@@ -10,7 +10,11 @@ interface FormData {
     memberId: string;
 }
 
-const AttendanceForm = () => {
+interface AttendanceFormProps {
+    onRegistration: (districtName: string) => void;
+}
+
+const AttendanceForm = ({ onRegistration }: AttendanceFormProps) => {
     const [formData, setFormData] = useState<FormData>({
         name: '',
         memberId: '',
@@ -46,6 +50,45 @@ const AttendanceForm = () => {
         e.preventDefault();
         if (formData.name && formData.email && formData.phone && formData.district) {
             setShowPreview(true);
+            // Map Tamil district names to English district names for registration tracking
+            const districtMapping: { [key: string]: string } = {
+                'அரியலூர்': 'Ariyalur',
+                'செங்கல்பட்டு': 'Chengalpattu',
+                'கோயம்பத்தூர்': 'Coimbatore',
+                'கடலூர்': 'Cuddalore',
+                'தர்மபுரி': 'Dharmapuri',
+                'திண்டுக்கல்': 'Dindigul',
+                'ஈரோடு': 'Erode',
+                'காஞ்சிபுரம்': 'Kancheepuram',
+                'கன்னியாகுமரி': 'Kanyakumari',
+                'கரூர்': 'Karur',
+                'கிருஷ்ணாகிரி': 'Krishnagiri',
+                'மதுரை': 'Madurai',
+                'மயிலாடுதுறை': 'Mayiladuthurai',
+                'நாகப்பட்டிணம்': 'Nagapattinam',
+                'நாமக்கல்': 'Namakkal',
+                'நீலகிரி': 'The Nilgiris',
+                'பெரம்பலூர்': 'Perambalur',
+                'புதுச்சேரி': 'Puducherry',
+                'ராமநாதபுரம்': 'Ramanathapuram',
+                'ராணிப்பேட்டை': 'Ranipet',
+                'சேலம்': 'Salem',
+                'சிவகங்கை': 'Sivagangai',
+                'தென்காசி': 'Tirunelveli',
+                'தஞ்சாவூர்': 'Thanjavur',
+                'தேனி': 'Theni',
+                'தூத்துக்குடி': 'Thoothukudi',
+                'திருப்பத்தூர்': 'Tiruppattur',
+                'திருப்பூர்': 'Tiruppur',
+                'திருவண்ணாமலை': 'Tiruvannamalai',
+                'திருவாரூர்': 'Tiruvarur',
+                'திருச்சிராப்பள்ளி': 'Tiruchirappalli',
+                'வேலூர்': 'Vellore',
+                'விழுப்புரம்': 'Villupuram',
+                'விருத்துநாகர்': 'Virudhunagar',
+            };
+            const englishDistrictName = districtMapping[formData.district] || formData.district;
+            onRegistration(englishDistrictName);
         }
     };
 
