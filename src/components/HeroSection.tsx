@@ -2,18 +2,36 @@ import { motion } from "framer-motion";
 import CountdownTimer from "./CountdownTimer";
 import { useState, useEffect } from "react";
 
+interface HeroSectionProps {
+    totalRegistrations: number;
+}
 
-const HeroSection = () => {
+const HeroSection = ({ totalRegistrations }: HeroSectionProps) => {
     const [showImage, setShowImage] = useState(true);
     const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
     useEffect(() => {
         const handleScroll = () => {
             const tamilNaduMapSection = document.querySelector('.tamil-nadu-map-section');
+            const videoPromoSection = document.querySelector('.video-promo-section');
+            
             if (tamilNaduMapSection) {
                 const rect = tamilNaduMapSection.getBoundingClientRect();
-                setShowImage(rect.top > window.innerHeight);
+                if (rect.top <= window.innerHeight) {
+                    setShowImage(false);
+                    return;
+                }
             }
+            
+            if (videoPromoSection) {
+                const rect = videoPromoSection.getBoundingClientRect();
+                if (rect.top <= window.innerHeight) {
+                    setShowImage(false);
+                    return;
+                }
+            }
+            
+            setShowImage(true);
         };
 
         const handleResize = () => {
@@ -37,7 +55,7 @@ const HeroSection = () => {
                         src="/annan-may-18-kovai-full-standing-hand-raising.png"
                         alt="Annan"
                         className="fixed right-10 top-0 h-screen object-cover pointer-events-none z-10 hidden md:block"
-                        style={{ height: '38rem' }}
+                        style={{ height: '35rem' }}
                     />
                 )}
 
@@ -46,7 +64,7 @@ const HeroSection = () => {
                 <div className="absolute right-20 w-96 h-96 bg-yellow-400/10 rounded-full filter blur-3xl opacity-20" />
             </section>
             <div className="relative overflow-visible" style={{ backgroundColor: '#ed1c24' }}>
-                <CountdownTimer />
+                <CountdownTimer totalRegistrations={totalRegistrations} />
             </div>
         </>
     );

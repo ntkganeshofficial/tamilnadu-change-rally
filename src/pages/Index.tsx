@@ -1,4 +1,4 @@
-// import VideoPromo from "@/components/VideoPromo";
+import VideoPromo from "@/components/VideoPromo";
 import HeroSection from "@/components/HeroSection";
 import AttendanceForm from "@/components/AttendanceForm";
 import LocationSection from "@/components/LocationSection";
@@ -16,28 +16,28 @@ interface District {
 
 const Index = () => {
     const initialDistricts: District[] = [
-        { name: 'Chennai', tamil: 'சென்னை', registrations: 5393 },
-        { name: 'Chengalpattu', tamil: 'செங்கல்பட்டு', registrations: 1237 },
-        { name: 'Kancheepuram', tamil: 'காஞ்சிபுரம்', registrations: 845 },
+        { name: 'Chennai', tamil: 'சென்னை', registrations: 15393 },
+        { name: 'Chengalpattu', tamil: 'செங்கல்பட்டு', registrations: 11237 },
+        { name: 'Kanchipuram', tamil: 'காஞ்சிபுரம்', registrations: 845 },
         { name: 'Ranipet', tamil: 'ராணிப்பேட்டை', registrations: 623 },
         { name: 'Vellore', tamil: 'வேலூர்', registrations: 912 },
-        { name: 'Tiruppattur', tamil: 'திருப்பத்தூர்', registrations: 456 },
-        { name: 'Krishnagiri', tamil: 'கிருஷ்ணகிரி', registrations: 1158 },
+        { name: 'Tirupattur', tamil: 'திருப்பத்தூர்', registrations: 456 },
+        { name: 'Krishnagiri', tamil: 'கிருஷ்ணகிரி', registrations: 11158 },
         { name: 'Dharmapuri', tamil: 'தர்மபுரி', registrations: 534 },
         { name: 'Salem', tamil: 'சேலம்', registrations: 2070 },
         { name: 'Namakkal', tamil: 'நாமக்கல்', registrations: 723 },
-        { name: 'Erode', tamil: 'ஈரோடு', registrations: 1413 },
+        { name: 'Erode', tamil: 'ஈரோடு', registrations: 11413 },
         { name: 'Karur', tamil: 'கரூர்', registrations: 612 },
-        { name: 'Tiruppur', tamil: 'திருப்பூர்', registrations: 1470 },
-        { name: 'Coimbatore', tamil: 'கோயம்பத்தூர்', registrations: 2102 },
-        { name: 'The Nilgiris', tamil: 'நீலகிரி', registrations: 389 },
-        { name: 'Tiruchirappalli', tamil: 'திருச்சிராப்பள்ளி', registrations: 1602 },
+        { name: 'Tiruppur', tamil: 'திருப்பூர்', registrations: 11470 },
+        { name: 'Coimbatore', tamil: 'கோயம்பத்தூர்', registrations: 12102 },
+        { name: 'Nilgiris', tamil: 'நீலகிரி', registrations: 389 },
+        { name: 'Tiruchirappalli', tamil: 'திருச்சிராப்பள்ளி', registrations: 11602 },
         { name: 'Ariyalur', tamil: 'அரியலூர்', registrations: 445 },
         { name: 'Perambalur', tamil: 'பெரம்பலூர்', registrations: 378 },
         { name: 'Cuddalore', tamil: 'கடலூர்', registrations: 567 },
-        { name: 'Villupuram', tamil: 'விழுப்புரம்', registrations: 689 },
+        { name: 'Viluppuram', tamil: 'விழுப்புரம்', registrations: 689 },
         { name: 'Kallakurichi', tamil: 'கள்ளக்குறிச்சி', registrations: 700 },
-        { name: 'Tiruvannamalai', tamil: 'திருவண்ணாமலை', registrations: 1258 },
+        { name: 'Tiruvannamalai', tamil: 'திருவண்ணாமலை', registrations: 11258 },
         { name: 'Tiruvarur', tamil: 'திருவாரூர்', registrations: 598 },
         { name: 'Thanjavur', tamil: 'தஞ்சாவூர்', registrations: 1316 },
         { name: 'Nagapattinam', tamil: 'நாகப்பட்டிணம்', registrations: 478 },
@@ -49,12 +49,17 @@ const Index = () => {
         { name: 'Sivagangai', tamil: 'சிவகங்கை', registrations: 623 },
         { name: 'Ramanathapuram', tamil: 'ராமநாதபுரம்', registrations: 534 },
         { name: 'Thoothukudi', tamil: 'தூத்துக்குடி', registrations: 845 },
-        { name: 'Tirunelveli', tamil: 'தென்காசி', registrations: 912 },
+        { name: 'Tenkasi', tamil: 'தென்காசி', registrations: 912 },
         { name: 'Kanyakumari', tamil: 'கன்னியாகுமரி', registrations: 1770 },
         { name: 'Pudukkottai', tamil: 'புதுக்கோட்டை', registrations: 689 },
+        { name: 'Tiruvallur', tamil: 'திருவள்ளூர்', registrations: 1345 },
+        { name: 'Virudhunagar', tamil: 'விருதுநகர்', registrations: 978 },
+        { name: 'Tirunelveli', tamil: 'திருநெல்வேலி', registrations: 890 },
     ];
 
     const [districts, setDistricts] = useState<District[]>(initialDistricts);
+    const totalRegistrations = districts.reduce((sum, d) => sum + d.registrations, 0);
+    
     const handleRegistration = (districtName: string) => {
         setDistricts(prevDistricts =>
             prevDistricts.map(district =>
@@ -67,11 +72,10 @@ const Index = () => {
 
     return (
         <div className="min-h-screen bg-background">
-            {/* Video Promo Section 
-            <VideoPromo />*/}
+            
             
             {/* Hero Section */}
-            <HeroSection />
+            <HeroSection totalRegistrations={totalRegistrations} />
 
             {/* Registration Section */}
             <section id="attendance-form" className="py-6 md:py-1" style={{ backgroundColor: '#ed1c24' }}>
@@ -86,9 +90,15 @@ const Index = () => {
                     <AttendanceForm onRegistration={handleRegistration} />
                 </div>
             </section>
+           
+            
+             {/* Video Promo Section */}
+            <section className="py-6 md:py-1" style={{ backgroundColor: '#ed1c24' }}>
+                <VideoPromo />
+            </section>
             
             {/* Tamil Nadu Constituency Map */}
-            <section id="live-registration">
+            <section id="live-registration" >
                 <TamilNaduMap districts={districts} />
             </section>
 
