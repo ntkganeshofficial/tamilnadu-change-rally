@@ -97,12 +97,13 @@ const VideoPromo = () => {
                             <video
                                 ref={videoRef}
                                 className="w-full h-full object-contain"
-                                src="/maanadu-promo-video.mp4"
+                                src="/maanaadu-promo-video-logo.mp4"
                                 title="Maanadu Promo Video"
                                 controls
                                 controlsList="nodownload"
                                 muted
                                 playsInline
+                                loop
                             />
                         </motion.div>
                     )}
