@@ -14,4 +14,20 @@ export default defineConfig({
     port: 5173,
     open: true,
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          // Split Firebase into its own chunk
+          'firebase-vendor': ['firebase/app', 'firebase/auth', 'firebase/firestore', 'firebase/storage'],
+          // Split Framer Motion into its own chunk
+          'framer-motion-vendor': ['framer-motion'],
+          // Split React and ReactDOM into their own chunk
+          'react-vendor': ['react', 'react-dom'],
+        },
+      },
+    },
+    // Increase chunk size warning limit to 1000 kB if needed
+    chunkSizeWarningLimit: 1000,
+  },
 })

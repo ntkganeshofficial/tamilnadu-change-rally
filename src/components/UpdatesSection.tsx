@@ -3,27 +3,16 @@ import { motion } from 'framer-motion';
 const UpdatesSection = () => {
     const updates = [
         {
-            date: 'Jan 25, 2026',
-            title: 'Kickoff Event',
-            description: 'Join us for the official launch of the Tamil Nadu Change Rally',
-            district: 'Chennai',
+            date: 'பிப் 20, 2026',
+            title: 'மாநாட்டு திடல் பார்வையிடல்',
+            description: 'மாற்றத்திற்க்கான மக்களின் மாநாட்டு திடல் பார்வையிடல் நிகழ்வு.',
+            district: 'திருச்சி',
         },
-        {
-            date: 'Feb 10, 2026',
-            title: 'Regional Meet',
-            description: 'District-wise regional meetings to discuss local concerns',
-            district: 'Coimbatore',
-        },
-        {
-            date: 'Mar 5, 2026',
-            title: 'Grand Rally',
-            description: 'Join thousands of participants from across Tamil Nadu',
-            district: 'Madurai',
-        },
+        
     ];
 
     return (
-        <section className="py-1 md:py-20 bg-background" style={{ backgroundColor: '#ed1c24' }}>
+        <section className="py-6 md:py-20 bg-background" style={{ backgroundColor: '#ed1c24' }}>
             <div className="container mx-auto px-4">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
@@ -38,7 +27,7 @@ const UpdatesSection = () => {
                     
                 </motion.div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="grid gap-6">
                     {updates.map((update, index) => (
                         <motion.div
                             key={index}

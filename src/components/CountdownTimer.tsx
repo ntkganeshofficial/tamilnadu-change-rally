@@ -7,7 +7,11 @@ interface TimeLeft {
     seconds: number;
 }
 
-const CountdownTimer = () => {
+interface CountdownTimerProps {
+    totalRegistrations: number;
+}
+
+const CountdownTimer = ({ totalRegistrations }: CountdownTimerProps) => {
     const [timeLeft, setTimeLeft] = useState<TimeLeft>({
         days: 26,
         hours: 1,
@@ -55,13 +59,13 @@ const CountdownTimer = () => {
 
     const TimeUnit = ({ value, label, tamilLabel }: { value: number; label: string; tamilLabel: string }) => (
         <div className="flex flex-col items-center">
-            <div className="bg-red-700/50 border-2 border-red-500 rounded-xl p-4 md:p-6 min-w-24 md:min-w-32">
-                <div className="text-4xl md:text-6xl font-bold text-yellow-400 font-tamil">
+            <div className="bg-red-700/50 border-2 border-red-500 rounded-xl p-2 md:p-6 min-w-16 md:min-w-32 flex items-center justify-center">
+                <div className="text-2xl md:text-6xl font-bold text-yellow-400 font-tamil">
                     {String(value).padStart(2, '0')}
                 </div>
             </div>
-            <div className="mt-3 text-center">
-                <div className="text-2xl md:text-2xl text-white text-sm md:text-base font-tamil font-semibold">
+            <div className="mt-2 md:mt-3 text-center">
+                <div className="text-xs md:text-base text-white font-tamil font-semibold">
                     {tamilLabel}
                 </div>
                 <div className="text-red-300 text-xs md:text-sm font-fredoka">
@@ -81,7 +85,7 @@ const CountdownTimer = () => {
                 </h3>
             </div>
             {/* Countdown Timer */}
-            <div className="flex justify-center gap-2 md:gap-4 mb-6 flex-wrap text-2xl md:text-2xl text-white">
+            <div className="flex justify-center gap-2 md:gap-4 mb-6 text-2xl md:text-2xl text-white">
                 <TimeUnit value={timeLeft.days} label="Days" tamilLabel="நாட்கள்" />
                 <TimeUnit value={timeLeft.hours} label="Hours" tamilLabel="மணி" />
                 <TimeUnit value={timeLeft.minutes} label="Minutes" tamilLabel="நிமிடம்" />
@@ -103,8 +107,8 @@ const CountdownTimer = () => {
             <div className="flex flex-wrap justify-center gap-6 md:gap-10">
                 {[
                     { number: '234', label: 'Constituencies', tamilLabel: 'தொகுதிகள்' },
-                    { number: '10,000+', label: 'Members', tamilLabel: 'உறுப்பினர்கள்' },
-                    { number: '100+', label: 'Sessions', tamilLabel: 'அமர்வுகள்' },
+                    { number: `${totalRegistrations.toLocaleString()}+`, label: 'Members', tamilLabel: 'உறுப்பினர்கள்' },
+                    { number: '5000+', label: 'Volunteers', tamilLabel: 'தன்னார்வளர்கள்' },
                 ].map((stat, index) => (
                     <div
                         key={index}
