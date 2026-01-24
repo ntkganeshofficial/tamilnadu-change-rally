@@ -1,6 +1,6 @@
-# 🚀 Tamil Nadu Change Rally - மாற்றத்திற்க்கான மக்களின் மாநாடு 2026
+# 🚀 Tamil Nadu Change Rally - மாற்றத்தை விரும்பும் மக்களின் மாநாடு 2026
 
-A modern, responsive React application for the Tamil Nadu Change Rally (மாற்றத்திற்க்கான மக்களின் மாநாடு) event management and registration platform.
+A modern, responsive React application for the Tamil Nadu Change Rally (மாற்றத்தை விரும்பும் மக்களின் மாநாடு) event management and registration platform.
 
 ## ✨ Features
 

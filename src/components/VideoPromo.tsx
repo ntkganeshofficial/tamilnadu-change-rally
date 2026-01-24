@@ -39,7 +39,7 @@ const VideoPromo = () => {
     }, [isPlaying]);
 
     return (
-        <section ref={sectionRef} className="relative w-full md:w-[93%] mx-auto bg-black/90 video-promo-section">
+        <section ref={sectionRef} className="relative w-full md:w-[93%] mx-auto bg-[#ed1c24] video-promo-section">
             <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -47,7 +47,7 @@ const VideoPromo = () => {
                 className="relative w-full h-[30vh] md:h-screen flex items-center justify-center"
             >
                 {/* Video Container */}
-                <div className="relative w-full h-full flex items-center justify-center bg-black">
+                <div className="relative w-full h-full flex items-center justify-center bg-[#ed1c24]">
                     {!isPlaying ? (
                         <motion.div
                             initial={{ scale: 0.9, opacity: 0 }}
@@ -57,7 +57,7 @@ const VideoPromo = () => {
                             onClick={() => setIsPlaying(true)}
                         >
                             {/* Thumbnail/Placeholder */}
-                            <div className="absolute inset-0 bg-gradient-to-b from-black/40 to-black/60 z-10" />
+                            <div className="absolute inset-0 bg-gradient-to-b from-[#ed1c24]/60 via-[#ed1c24]/70 to-[#ed1c24]/80 z-10" />
                             <img
                                 src="/maanaadu-2026-logo-final.png"
                                 alt="Video Promo"
