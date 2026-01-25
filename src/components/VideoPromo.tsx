@@ -39,12 +39,12 @@ const VideoPromo = () => {
     }, [isPlaying]);
 
     return (
-        <section ref={sectionRef} className="relative w-full md:w-[93%] mx-auto bg-[#ed1c24] video-promo-section">
+        <section ref={sectionRef} className="relative w-[96%] md:w-[96%] mx-auto bg-[#ed1c24] video-promo-section">
             <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.8 }}
-                className="relative w-full h-[30vh] md:h-screen flex items-center justify-center"
+                className="relative w-full flex items-center justify-center overflow-hidden"
             >
                 {/* Video Container */}
                 <div className="relative w-full h-full flex items-center justify-center bg-[#ed1c24]">
@@ -69,9 +69,9 @@ const VideoPromo = () => {
                                 whileHover={{ scale: 1.2 }}
                                 className="absolute z-20 flex items-center justify-center"
                             >
-                                <div className="bg-red-600 hover:bg-red-700 text-white rounded-full p-6 transition-all shadow-2xl">
+                                <div className="bg-red-600 hover:bg-red-700 text-white rounded-full p-3 md:p-6 transition-all shadow-2xl">
                                     <svg
-                                        className="w-12 h-12 fill-current"
+                                        className="w-6 h-6 md:w-12 md:h-12 fill-current"
                                         viewBox="0 0 24 24"
                                     >
                                         <polygon points="5 3 19 12 5 21" />
@@ -85,26 +85,26 @@ const VideoPromo = () => {
                                 transition={{ repeat: Infinity, duration: 2 }}
                                 className="absolute bottom-10 z-20 text-white text-center"
                             >
-                                <p className="text-lg font-semibold">Click to Play</p>
+                                <p className="text-xs md:text-lg font-semibold">Click to Play</p>
                             </motion.div>
                         </motion.div>
                     ) : (
                         <motion.div
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
-                            className="relative w-full h-full"
+                            className="relative w-full bg-[#ed1c24]"
                         >
-                            <video
-                                ref={videoRef}
-                                className="w-full h-full object-contain"
-                                src="/maanaadu-promo-video-logo.mp4"
-                                title="Maanadu Promo Video"
-                                controls
-                                controlsList="nodownload"
-                                muted
-                                playsInline
-                                loop
-                            />
+                            <div className="relative w-full" style={{ paddingTop: '56.25%' }}>
+                                <iframe
+                                    className="absolute inset-0 w-full h-full"
+                                    src="https://www.youtube.com/embed/ZSqnqxdt1Yw?autoplay=1&mute=1&loop=1&playlist=ZSqnqxdt1Yw&modestbranding=1&rel=0&controls=1"
+                                    title="Maanadu Promo Video"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                    allowFullScreen
+                                    referrerPolicy="strict-origin-when-cross-origin"
+                                    style={{ border: 'none' }}
+                                />
+                            </div>
                         </motion.div>
                     )}
                 </div>

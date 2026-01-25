@@ -50,7 +50,7 @@ const Index = () => {
         { name: 'Ramanathapuram', tamil: 'ராமநாதபுரம்', registrations: 534 },
         { name: 'Thoothukudi', tamil: 'தூத்துக்குடி', registrations: 845 },
         { name: 'Tenkasi', tamil: 'தென்காசி', registrations: 912 },
-        { name: 'Kanyakumari', tamil: 'கன்னியாகுமரி', registrations: 1770 },
+        { name: 'Kanyakumari', tamil: 'கண்ணியாகுமரி', registrations: 1770 },
         { name: 'Pudukkottai', tamil: 'புதுக்கோட்டை', registrations: 689 },
         { name: 'Tiruvallur', tamil: 'திருவள்ளூர்', registrations: 1345 },
         { name: 'Virudhunagar', tamil: 'விருதுநகர்', registrations: 978 },

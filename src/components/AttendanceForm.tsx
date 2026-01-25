@@ -199,8 +199,8 @@ const AttendanceForm = ({ onRegistration }: AttendanceFormProps) => {
     const generateCardImage = (): Promise<Blob> => {
         return new Promise((resolve, reject) => {
             const canvas = document.createElement('canvas');
-            canvas.width = 480;
-            canvas.height = 550;
+            canvas.width = 1080;
+            canvas.height = 1350;
             const ctx = canvas.getContext('2d');
             if (!ctx) {
                 reject(new Error('Failed to get canvas context'));
@@ -211,7 +211,7 @@ const AttendanceForm = ({ onRegistration }: AttendanceFormProps) => {
             const bgImg = new Image();
             bgImg.onload = () => {
                 // Draw background image
-                ctx.drawImage(bgImg, 0, 0, 480, 550);
+                ctx.drawImage(bgImg, 0, 0, 1080, 1350);
 
                 // Draw photo if exists
                 if (formData.photoUrl) {
@@ -219,27 +219,27 @@ const AttendanceForm = ({ onRegistration }: AttendanceFormProps) => {
                     img.onload = () => {
                         ctx.save();
                         ctx.beginPath();
-                        ctx.rect(60, 320, 120, 125);
+                        ctx.rect(135, 784, 270, 306);
                         ctx.closePath();
                         ctx.clip();
-                        ctx.drawImage(img, 60, 320, 120, 125);
+                        ctx.drawImage(img, 135, 784, 270, 306);
                         ctx.restore();
 
                         // Draw border around photo
                         ctx.strokeStyle = '#fbbf24';
-                        ctx.lineWidth = 3;
-                        ctx.strokeRect(60, 320, 120, 125);
+                        ctx.lineWidth = 7;
+                        ctx.strokeRect(135, 784, 270, 306);
 
                         // Draw name
-                        ctx.font = 'bold 18px Arial';
+                        ctx.font = 'bold 40px Arial';
                         ctx.fillStyle = '#fffc43ff';
                         ctx.textAlign = 'center';
-                        ctx.fillText(`${formData.name}`, 130, 470);
+                        ctx.fillText(`${formData.name}`, 270, 1152);
 
                         // Draw district
-                        ctx.font = '14px Arial';
+                        ctx.font = '32px Arial';
                         ctx.fillStyle = '#ffffffff';
-                        ctx.fillText(formData.district, 120, 490);
+                        ctx.fillText(formData.district, 270, 1200);
 
                         canvas.toBlob((blob) => {
                             if (blob) {
@@ -253,14 +253,14 @@ const AttendanceForm = ({ onRegistration }: AttendanceFormProps) => {
                     img.src = formData.photoUrl;
                 } else {
                     // If no photo, still generate the card
-                    ctx.font = 'bold 18px Arial';
+                    ctx.font = 'bold 40px Arial';
                     ctx.fillStyle = '#ffffff';
                     ctx.textAlign = 'center';
-                    ctx.fillText(formData.name, 200, 400);
+                    ctx.fillText(formData.name, 540, 900);
 
-                    ctx.font = '14px Arial';
+                    ctx.font = '32px Arial';
                     ctx.fillStyle = '#fbbf24';
-                    ctx.fillText(formData.district, 200, 430);
+                    ctx.fillText(formData.district, 540, 980);
                     
                     canvas.toBlob((blob) => {
                         if (blob) {
@@ -483,7 +483,7 @@ const AttendanceForm = ({ onRegistration }: AttendanceFormProps) => {
                             <option value="ஈரோடு">ஈரோடு</option>
                             <option value="கள்ளக்குறிச்சி">கள்ளக்குறிச்சி</option>
                             <option value="காஞ்சிபுரம்">காஞ்சிபுரம்</option>
-                            <option value="கன்னியாகுமரி">கன்னியாகுமரி</option>
+                            <option value="கண்ணியாகுமரி">கண்ணியாகுமரி</option>
                             <option value="கரூர்">கரூர்</option>
                             <option value="கிருஷ்ணாகிரி">கிருஷ்ணாகிரி</option>
                             <option value="மதுரை">மதுரை</option>
@@ -492,6 +492,7 @@ const AttendanceForm = ({ onRegistration }: AttendanceFormProps) => {
                             <option value="நாமக்கல்">நாமக்கல்</option>
                             <option value="நீலகிரி">நீலகிரி</option>
                             <option value="பெரம்பலூர்">பெரம்பலூர்</option>
+                            <option value="புதுக்கோட்டை">புதுக்கோட்டை</option>
                             <option value="புதுச்சேரி">புதுச்சேரி</option>
                             <option value="ராமநாதபுரம்">ராமநாதபுரம்</option>
                             <option value="ராணிப்பேட்டை">ராணிப்பேட்டை</option>
@@ -505,11 +506,13 @@ const AttendanceForm = ({ onRegistration }: AttendanceFormProps) => {
                             <option value="திருப்பத்தூர்">திருப்பத்தூர்</option>
                             <option value="திருப்பூர்">திருப்பூர்</option>
                             <option value="திருவண்ணாமலை">திருவண்ணாமலை</option>
-			    <option value="திருவள்ளூர்">திருவள்ளூர்</option>
+                            <option value="திருச்சிராப்பள்ளி">திருச்சிராப்பள்ளி</option>
+			                <option value="திருவள்ளூர்">திருவள்ளூர்</option>
                             <option value="திருவாரூர்">திருவாரூர்</option>
                             <option value="வேலூர்">வேலூர்</option>
                             <option value="விழுப்புரம்">விழுப்புரம்</option>
                             <option value="விருதுநகர்">விருதுநகர்</option>
+                            
                         </select>
                     </div>
 

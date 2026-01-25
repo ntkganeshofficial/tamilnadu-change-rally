@@ -26,13 +26,6 @@ const CountdownTimer = ({ totalRegistrations }: CountdownTimerProps) => {
         }
     };
 
-    const handleViewConstituenciesClick = () => {
-        const liveRegistration = document.getElementById('live-registration');
-        if (liveRegistration) {
-            liveRegistration.scrollIntoView({ behavior: 'smooth' });
-        }
-    };
-
     useEffect(() => {
         // Set target date to Feb 21, 2026
         const targetDate = new Date('2026-02-21T10:00:00').getTime();
@@ -93,13 +86,13 @@ const CountdownTimer = ({ totalRegistrations }: CountdownTimerProps) => {
             </div>
 
             {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row gap-3 justify-center items-center mb-6">
-                <button onClick={handleRegisterClick} className="px-6 md:px-8 py-2 md:py-3 bg-yellow-400 hover:bg-yellow-300 text-red-700 font-bold rounded-full transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-1 font-fredoka text-sm md:text-base flex items-center gap-2">
+            <div className="flex flex-row gap-3 justify-center items-center mb-6 max-w-2xl mx-auto">
+                <button onClick={handleRegisterClick} className="flex-1 px-3 md:px-8 py-2 md:py-3 bg-yellow-400 hover:bg-yellow-300 text-red-700 font-bold rounded-full transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-1 font-fredoka text-xs md:text-base flex items-center justify-center gap-2">
                     👤 பதிவு செய்ய
-                    <span className="text-lg">↓</span>
+                    <span className="text-lg hidden md:inline">↓</span>
                 </button>
-                <button onClick={handleViewConstituenciesClick} className="px-6 md:px-8 py-2 md:py-3 border-3 border-red-200 text-red-100 font-bold rounded-full hover:bg-yellow-700/30 transition-all shadow-lg font-fredoka text-sm md:text-base">
-                    பார்வையிட
+                <button onClick={() => window.open('https://donate.naamtamilar.org/index.html', '_blank')} className="flex-1 px-3 md:px-8 py-2 md:py-3 bg-yellow-400 hover:bg-yellow-300 text-red-700 font-bold rounded-full transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-1 font-fredoka text-xs md:text-base flex items-center justify-center">
+                    கொடையளிக்க
                 </button>
             </div>
 
