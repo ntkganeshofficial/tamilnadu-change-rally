@@ -55,7 +55,7 @@ const HeroSection = ({ totalRegistrations }: HeroSectionProps) => {
                         src="/annan-may-18-kovai-full-standing-hand-raising.png"
                         alt="Annan"
                         className="fixed right-10 top-0 h-screen object-cover pointer-events-none z-10 hidden md:block"
-                        style={{ height: '35rem' }}
+                        style={{ height: '35rem', top: '6rem' }}
                     />
                 )}
 

@@ -74,7 +74,6 @@ const Index = () => {
     return (
         <div className="min-h-screen bg-background">
             
-            
             {/* Hero Section */}
             <HeroSection totalRegistrations={totalRegistrations} />
 
