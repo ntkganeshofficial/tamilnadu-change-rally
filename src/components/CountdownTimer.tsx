@@ -91,7 +91,7 @@ const CountdownTimer = ({ totalRegistrations }: CountdownTimerProps) => {
                     👤 பதிவு செய்ய
                     <span className="text-lg hidden md:inline">↓</span>
                 </button>
-                <button onClick={() => window.open('https://donate.naamtamilar.org/index.html', '_blank')} className="flex-1 px-3 md:px-8 py-2 md:py-3 bg-yellow-400 hover:bg-yellow-300 text-red-700 font-bold rounded-full transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-1 font-fredoka text-xs md:text-base flex items-center justify-center">
+                <button onClick={() => window.open('https://donate.naamtamilar.org/peoples_convention_2026.html', '_blank')} className="flex-1 px-3 md:px-8 py-2 md:py-3 bg-yellow-400 hover:bg-yellow-300 text-red-700 font-bold rounded-full transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-1 font-fredoka text-xs md:text-base flex items-center justify-center">
                     கொடையளிக்க
                 </button>
             </div>
@@ -101,7 +101,7 @@ const CountdownTimer = ({ totalRegistrations }: CountdownTimerProps) => {
                 {[
                     { number: '234', label: 'Constituencies', tamilLabel: 'தொகுதிகள்' },
                     { number: `${totalRegistrations.toLocaleString()}+`, label: 'Members', tamilLabel: 'உறுப்பினர்கள்' },
-                    { number: '5000+', label: 'Volunteers', tamilLabel: 'தன்னார்வளர்கள்' },
+                    { number: '6000+', label: 'Volunteers', tamilLabel: 'தன்னார்வளர்கள்' },
                 ].map((stat, index) => (
                     <div
                         key={index}

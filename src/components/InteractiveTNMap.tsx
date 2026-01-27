@@ -48,7 +48,7 @@ const InteractiveTNMap = ({ selectedDistrict, onDistrictClick, districts }: Inte
                     if (selectedDistrict === district.name) {
                         textEl.style.fill = '#dc2626';
                         textEl.style.fontWeight = 'bold';
-                        textEl.style.fontSize = '20px';
+                        textEl.style.fontSize = '28px';
                     } else {
                         textEl.style.fill = '#000000ff';
                         textEl.style.fontWeight = 'bold';

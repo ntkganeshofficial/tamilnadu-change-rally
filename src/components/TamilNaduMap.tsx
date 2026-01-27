@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { useState } from 'react';
 import InteractiveTNMap from './InteractiveTNMap';
+// import ExportRegistrations from './ExportRegistrations';
 
 interface District {
     name: string;
@@ -105,6 +106,9 @@ const TamilNaduMap = ({ districts }: TamilNaduMapProps) => {
                                         ))}
                                     </div>
                                 </div>
+                                {/* <div>
+                                    <ExportRegistrations />
+                                </div> */}
                             </div>
                         </div>
                     )}

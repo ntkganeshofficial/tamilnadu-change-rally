@@ -48,7 +48,7 @@ const LocationSection = () => {
                                 height="100%"
                                 frameBorder="0"
                                 style={{ border: 0 }}
-                                src="https://maps.google.com/maps?q=10.8160024,78.6066251&z=12&output=embed"
+                                src="https://maps.google.com/maps?q=MGXG+4F,+Chithanatham,+Tamil+Nadu&z=15&output=embed"
                                 allowFullScreen
                                 loading="lazy"
                                 referrerPolicy="no-referrer-when-downgrade"

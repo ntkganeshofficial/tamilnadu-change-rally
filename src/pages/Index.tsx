@@ -4,6 +4,7 @@ import AttendanceForm from "@/components/AttendanceForm";
 import LocationSection from "@/components/LocationSection";
 import UpdatesSection from "@/components/UpdatesSection";
 import TamilNaduMap from "@/components/TamilNaduMap";
+import UploadOwnVideo from "@/components/UploadOwnVideo";
 import Footer from "@/components/Footer";
 import { motion } from "framer-motion";
 import { useState } from "react";
@@ -105,6 +106,11 @@ const Index = () => {
             {/* Updates Section */}
             <section className="py-6 md:py-1" style={{ backgroundColor: '#ed1c24' }}>
                 <UpdatesSection />
+            </section>
+
+             {/* Updates Section */}
+            <section className="py-6 md:py-1" style={{ backgroundColor: '#ed1c24' }}>
+                <UploadOwnVideo />
             </section>
 
             {/* Location Section */}

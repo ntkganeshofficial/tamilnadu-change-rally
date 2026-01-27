@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { db } from '../firebase';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
@@ -8,9 +8,17 @@ interface FormData {
     name: string;
     email: string;
     phone: string;
+    state: string;
     district: string;
     photoUrl: string;
     memberId: string;
+}
+
+interface District {
+    _id: string;
+    name: string;
+    level: number;
+    parentid: string;
 }
 
 interface AttendanceFormProps {
@@ -23,13 +31,105 @@ const AttendanceForm = ({ onRegistration }: AttendanceFormProps) => {
         memberId: '',
         email: '',
         phone: '',
+        state: '',
         district: '',
         photoUrl: '',
     });
 
+    const [districts, setDistricts] = useState<District[]>([]);
+    const [states, setStates] = useState<District[]>([]);
     const [showPreview, setShowPreview] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [successMessage, setSuccessMessage] = useState('');
+    const [memberSuggestions, setMemberSuggestions] = useState<any[]>([]);
+    const [showMemberDropdown, setShowMemberDropdown] = useState(false);
+    const [memberSearchTimeout, setMemberSearchTimeout] = useState<NodeJS.Timeout | null>(null);
+    const [backgroundImage, setBackgroundImage] = useState('/idcard_bg1.jpeg');
+    
+    // Fetch member details from API
+    const fetchMemberSuggestions = async (memberId: string) => {
+        if (!memberId || memberId.length < 3) {
+            setMemberSuggestions([]);
+            setShowMemberDropdown(false);
+            return;
+        }
+        
+        try {
+            const response = await fetch(`https://api.naamtamilar.org/base/name/${encodeURIComponent(memberId)}`);
+            
+            if (!response.ok) {
+                console.error('API Error:', response.status, response.statusText);
+                setMemberSuggestions([]);
+                setShowMemberDropdown(false);
+                return;
+            }
+            
+            const data = await response.json();
+            console.log('Member API Response:', data);
+            
+            if (data.success && Array.isArray(data.data)) {
+                console.log('Setting suggestions:', data.data.length, 'items');
+                setMemberSuggestions(data.data);
+                setShowMemberDropdown(data.data.length > 0);
+                console.log('Dropdown should be visible:', data.data.length > 0);
+            } else if (Array.isArray(data)) {
+                setMemberSuggestions(data);
+                setShowMemberDropdown(data.length > 0);
+            } else {
+                setMemberSuggestions([]);
+                setShowMemberDropdown(false);
+            }
+        } catch (error) {
+            console.error('Error fetching member suggestions:', error);
+            setMemberSuggestions([]);
+            setShowMemberDropdown(false);
+        }
+    };
+    
+    // Fetch states from API
+    useEffect(() => {
+        const fetchStates = async () => {
+            try {
+                const response = await fetch('https://api.naamtamilar.org/location/state/list/5aec2493d727a824b00aa2d4');
+                const data = await response.json();
+                console.log('States API Response:', data);
+                
+                if (data.success && Array.isArray(data.data)) {
+                    setStates(data.data);
+                } else if (Array.isArray(data)) {
+                    setStates(data);
+                }
+            } catch (error) {
+                console.error('Error fetching states:', error);
+            }
+        };
+        fetchStates();
+    }, []);
+
+    // Fetch districts based on selected state
+    const fetchDistrictsByState = async (stateId: string) => {
+        if (!stateId) {
+            setDistricts([]);
+            return;
+        }
+        
+        try {
+            const response = await fetch(`https://api.naamtamilar.org/location/district/list/${stateId}`);
+            const data = await response.json();
+            console.log('Districts API Response:', data);
+            
+            if (data.success && Array.isArray(data.data)) {
+                setDistricts(data.data);
+            } else if (Array.isArray(data)) {
+                setDistricts(data);
+            } else {
+                setDistricts([]);
+            }
+        } catch (error) {
+            console.error('Error fetching districts:', error);
+            setDistricts([]);
+        }
+    };
     
     // Crop states
     const [showCropModal, setShowCropModal] = useState(false);
@@ -41,6 +141,58 @@ const AttendanceForm = ({ onRegistration }: AttendanceFormProps) => {
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
+        
+        // Handle state selection - fetch districts and reset district value
+        if (name === 'state') {
+            const selectedState = states.find(s => s.name === value);
+            if (selectedState) {
+                fetchDistrictsByState(selectedState._id);
+            } else {
+                setDistricts([]);
+            }
+            // Reset district when state changes
+            setFormData(prev => ({ ...prev, district: '' }));
+        }
+        
+        // Handle member ID autocomplete
+        if (name === 'memberId') {
+            console.log('Member ID onChange:', value);
+            
+            // Clear previous timeout
+            if (memberSearchTimeout) {
+                clearTimeout(memberSearchTimeout);
+            }
+            
+            // Set new timeout for debounced search
+            const timeout = setTimeout(() => {
+                fetchMemberSuggestions(value);
+            }, 300);
+            
+            setMemberSearchTimeout(timeout);
+        }
+    };
+    
+    const handleMemberSelect = (member: any) => {
+
+        const newFormData = {
+            memberId: member._id || '',
+            name: member.name || '',
+            email: member.email || '',
+            phone: member.contactno || member.whatsapp || '',
+        };
+        
+        console.log('New form data to set:', newFormData);
+        
+        setFormData(prev => {
+            const updated = { 
+                ...prev, 
+                ...newFormData
+            };
+            console.log('Updated formData:', updated);
+            return updated;
+        });
+        setShowMemberDropdown(false);
+        setMemberSuggestions([]);
     };
 
     const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -117,7 +269,7 @@ const AttendanceForm = ({ onRegistration }: AttendanceFormProps) => {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        if (formData.name && formData.email && formData.phone && formData.district) {
+        if (formData.name && formData.email && formData.phone && formData.state) {
             setShowPreview(true);
             // Map Tamil district names to English district names for registration tracking
             const districtMapping: { [key: string]: string } = {
@@ -175,6 +327,7 @@ const AttendanceForm = ({ onRegistration }: AttendanceFormProps) => {
                 name: formData.name,
                 email: formData.email,
                 phone: formData.phone,
+                state: formData.state,
                 district: formData.district,
                 districtEnglish: englishDistrictName,
                 memberId: formData.memberId,
@@ -199,8 +352,10 @@ const AttendanceForm = ({ onRegistration }: AttendanceFormProps) => {
     const generateCardImage = (): Promise<Blob> => {
         return new Promise((resolve, reject) => {
             const canvas = document.createElement('canvas');
-            canvas.width = 1080;
-            canvas.height = 1350;
+            // Match preview card dimensions scaled up 3x for better quality
+            canvas.width = 1080;  // 352 * 3
+            canvas.height = 1350; // 440 * 3
+            const scale = 3;
             const ctx = canvas.getContext('2d');
             if (!ctx) {
                 reject(new Error('Failed to get canvas context'));
@@ -211,35 +366,43 @@ const AttendanceForm = ({ onRegistration }: AttendanceFormProps) => {
             const bgImg = new Image();
             bgImg.onload = () => {
                 // Draw background image
-                ctx.drawImage(bgImg, 0, 0, 1080, 1350);
+                ctx.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
 
                 // Draw photo if exists
                 if (formData.photoUrl) {
                     const img = new Image();
                     img.onload = () => {
+                        // Photo dimensions and position matching preview (scaled up)
+                        const photoSize = 90 * scale; // 270px (reduced by 10%)
+                        const photoLeft = (57.6 - 10 - 16 + 10) * scale; // 1.8rem - 2rem left adjustment + 10px right * 16px * 3
+                        const photoTop = canvas.height - (photoSize + 96 * scale) + (15 * scale); // Position from bottom, moved 15px down
+                        
                         ctx.save();
                         ctx.beginPath();
-                        ctx.rect(135, 784, 270, 306);
+                        ctx.rect(photoLeft, photoTop, photoSize, photoSize);
                         ctx.closePath();
                         ctx.clip();
-                        ctx.drawImage(img, 135, 784, 270, 306);
+                        ctx.drawImage(img, photoLeft, photoTop, photoSize, photoSize);
                         ctx.restore();
 
-                        // Draw border around photo
+                        // Draw border around photo (2px * 3 = 6px)
                         ctx.strokeStyle = '#fbbf24';
-                        ctx.lineWidth = 7;
-                        ctx.strokeRect(135, 784, 270, 306);
+                        ctx.lineWidth = 6;
+                        ctx.strokeRect(photoLeft, photoTop, photoSize, photoSize);
 
-                        // Draw name
-                        ctx.font = 'bold 40px Arial';
-                        ctx.fillStyle = '#fffc43ff';
+                        // Draw name (positioned below photo, centered to photo)
+                        ctx.font = `bold ${12 * scale}px Arial`; // text-sm (12px) * 3 = 36px
+                        ctx.fillStyle = '#facc15'; // yellow-400
                         ctx.textAlign = 'center';
-                        ctx.fillText(`${formData.name}`, 270, 1152);
+                        const textX = photoLeft + (photoSize / 2); // Center of photo
+                        const nameY = photoTop + photoSize + (17 * scale); // Below photo
+                        ctx.fillText(formData.name, textX, nameY);
 
-                        // Draw district
-                        ctx.font = '32px Arial';
-                        ctx.fillStyle = '#ffffffff';
-                        ctx.fillText(formData.district, 270, 1200);
+                        // Draw district (below name, centered to photo)
+                        ctx.font = `bold ${12 * scale}px Arial`; // text-sm (12px) * 3 = 42px
+                        ctx.fillStyle = '#ffffff';
+                        const districtY = nameY + (18 * scale); // Moved 10px up
+                        ctx.fillText(formData.district || formData.state, textX, districtY);
 
                         canvas.toBlob((blob) => {
                             if (blob) {
@@ -253,14 +416,14 @@ const AttendanceForm = ({ onRegistration }: AttendanceFormProps) => {
                     img.src = formData.photoUrl;
                 } else {
                     // If no photo, still generate the card
-                    ctx.font = 'bold 40px Arial';
-                    ctx.fillStyle = '#ffffff';
+                    ctx.font = `bold ${42 * scale}px Arial`;
+                    ctx.fillStyle = '#facc15';
                     ctx.textAlign = 'center';
-                    ctx.fillText(formData.name, 540, 900);
+                    ctx.fillText(formData.name, canvas.width / 2, canvas.height - 200 * scale);
 
-                    ctx.font = '32px Arial';
-                    ctx.fillStyle = '#fbbf24';
-                    ctx.fillText(formData.district, 540, 980);
+                    ctx.font = `bold ${42 * scale}px Arial`;
+                    ctx.fillStyle = '#ffffff';
+                    ctx.fillText(formData.district || formData.state, canvas.width / 2, canvas.height - 150 * scale);
                     
                     canvas.toBlob((blob) => {
                         if (blob) {
@@ -272,7 +435,7 @@ const AttendanceForm = ({ onRegistration }: AttendanceFormProps) => {
                 }
             };
             bgImg.onerror = () => reject(new Error('Failed to load background image'));
-            bgImg.src = '/idcard_bg1.jpeg';
+            bgImg.src = backgroundImage;
         });
     };
 
@@ -368,7 +531,7 @@ const AttendanceForm = ({ onRegistration }: AttendanceFormProps) => {
                 onSubmit={handleSubmit}
                 viewport={{ once: true }}
                 className="rounded-lg p-3"
-                style={{ backgroundColor: 'rgba(219, 0, 0)' }}>
+                style={{ backgroundColor: 'rgba(219, 0, 0)', position: 'relative', zIndex: 1 }}>
 
                 <h2 className="text-2xl md:text-2xl text-white text-center text-foreground pb-4">
                     உங்கள் வருகையை பதிவு செய்க
@@ -420,7 +583,7 @@ const AttendanceForm = ({ onRegistration }: AttendanceFormProps) => {
                             className="w-full px-4 py-2 border border-red-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400"
                         />
                     </div>
-                    <div>
+                    <div className="relative">
                         <label className="block text-sm font-medium text-white mb-2">
                             உறுப்பினர் எண் (கட்டாயமில்லை)
                         </label>
@@ -429,9 +592,45 @@ const AttendanceForm = ({ onRegistration }: AttendanceFormProps) => {
                             name="memberId"
                             value={formData.memberId}
                             onChange={handleChange}
-
+                            onBlur={() => {
+                                // Delay hiding to allow click on dropdown
+                                setTimeout(() => setShowMemberDropdown(false), 200);
+                            }}
+                            placeholder="உறுப்பினர் எண் உள்ளிடவும்"
+                            autoComplete="off"
                             className="w-full px-4 py-2 border border-red-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400"
                         />
+                        
+                        {/* Autocomplete Dropdown */}
+                        {memberSuggestions.length > 0 && (
+                            <div className="absolute z-[9999] w-full mt-1 bg-white border-2 border-yellow-400 rounded-lg shadow-2xl max-h-60 overflow-y-auto">
+                                <div className="px-4 py-1 bg-gray-100 text-xs text-gray-600 border-b">
+                                    {memberSuggestions.length} results found
+                                </div>
+                                {memberSuggestions.map((member, index) => (
+                                    <div
+                                        key={index}
+                                        onMouseDown={(e) => {
+                                            e.preventDefault();
+                                            handleMemberSelect(member);
+                                        }}
+                                        className="px-4 py-2 hover:bg-yellow-100 cursor-pointer border-b border-gray-200 last:border-b-0"
+                                    >
+                                        <div className="font-semibold text-gray-800">
+                                            {member.name || 'Unknown'}
+                                        </div>
+                                        <div className="text-sm text-gray-600">
+                                            ID: {member._id || 'N/A'}
+                                        </div>
+                                        {member.contactno && (
+                                            <div className="text-xs text-gray-500">
+                                                {member.contactno}
+                                            </div>
+                                        )}
+                                    </div>
+                                ))}
+                            </div>
+                        )}
                     </div>
 
                     <div>
@@ -464,57 +663,44 @@ const AttendanceForm = ({ onRegistration }: AttendanceFormProps) => {
 
                     <div>
                         <label className="block text-sm font-medium text-white mb-2">
-                            மாவட்டம்
+                            மாநிலம்
                         </label>
                         <select
-                            name="district"
-                            value={formData.district}
+                            name="state"
+                            value={formData.state}
                             onChange={handleChange}
                             required
                             className="w-full px-4 py-2 border border-red-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400"
                         >
-                            <option value="">மாவட்டம்</option>
-                            <option value="அரியலூர்">அரியலூர்</option>
-                            <option value="செங்கல்பட்டு">செங்கல்பட்டு</option>
-                            <option value="கோயம்பத்தூர்">கோயம்பத்தூர்</option>
-                            <option value="கடலூர்">கடலூர்</option>
-                            <option value="தர்மபுரி">தர்மபுரி</option>
-                            <option value="திண்டுக்கல்">திண்டுக்கல்</option>
-                            <option value="ஈரோடு">ஈரோடு</option>
-                            <option value="கள்ளக்குறிச்சி">கள்ளக்குறிச்சி</option>
-                            <option value="காஞ்சிபுரம்">காஞ்சிபுரம்</option>
-                            <option value="கண்ணியாகுமரி">கண்ணியாகுமரி</option>
-                            <option value="கரூர்">கரூர்</option>
-                            <option value="கிருஷ்ணாகிரி">கிருஷ்ணாகிரி</option>
-                            <option value="மதுரை">மதுரை</option>
-                            <option value="மயிலாடுதுறை">மயிலாடுதுறை</option>
-                            <option value="நாகப்பட்டிணம்">நாகப்பட்டிணம்</option>
-                            <option value="நாமக்கல்">நாமக்கல்</option>
-                            <option value="நீலகிரி">நீலகிரி</option>
-                            <option value="பெரம்பலூர்">பெரம்பலூர்</option>
-                            <option value="புதுக்கோட்டை">புதுக்கோட்டை</option>
-                            <option value="புதுச்சேரி">புதுச்சேரி</option>
-                            <option value="ராமநாதபுரம்">ராமநாதபுரம்</option>
-                            <option value="ராணிப்பேட்டை">ராணிப்பேட்டை</option>
-                            <option value="சென்னை">சென்னை</option>
-                            <option value="சேலம்">சேலம்</option>
-                            <option value="சிவகங்கை">சிவகங்கை</option>
-                            <option value="தென்காசி">தென்காசி</option>
-                            <option value="தஞ்சாவூர்">தஞ்சாவூர்</option>
-                            <option value="தேனி">தேனி</option>
-                            <option value="தூத்துக்குடி">தூத்துக்குடி</option>
-                            <option value="திருப்பத்தூர்">திருப்பத்தூர்</option>
-                            <option value="திருப்பூர்">திருப்பூர்</option>
-                            <option value="திருவண்ணாமலை">திருவண்ணாமலை</option>
-                            <option value="திருச்சிராப்பள்ளி">திருச்சிராப்பள்ளி</option>
-			                <option value="திருவள்ளூர்">திருவள்ளூர்</option>
-                            <option value="திருவாரூர்">திருவாரூர்</option>
-                            <option value="வேலூர்">வேலூர்</option>
-                            <option value="விழுப்புரம்">விழுப்புரம்</option>
-                            <option value="விருதுநகர்">விருதுநகர்</option>
-                            
+                            <option value="">மாநிலம்</option>
+                            {states.map((state) => (
+                                <option key={state._id} value={state.name}>
+                                    {state.name}
+                                </option>
+                            ))}
                         </select>
                     </div>
+
+                    {districts.length > 0 && (
+                        <div>
+                            <label className="block text-sm font-medium text-white mb-2">
+                                மாவட்டம்
+                            </label>
+                            <select
+                                name="district"
+                                value={formData.district}
+                                onChange={handleChange}
+                                className="w-full px-4 py-2 border border-red-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                            >
+                                <option value="">மாவட்டம்</option>
+                                {districts.map((district) => (
+                                    <option key={district._id} value={district.name}>
+                                        {district.name}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                    )}
 
                     <p className="text-xs text-white text-center mt-4">
                         * உங்கள் தகவல்கள் தொடர்புக்கு பயன்படுத்தப்படும்
@@ -597,7 +783,7 @@ const AttendanceForm = ({ onRegistration }: AttendanceFormProps) => {
             )}
 
             {/* Modal Popup */}
-            {showPreview && formData.name && formData.email && formData.phone && formData.district && (
+            {showPreview && formData.name && formData.email && formData.phone && formData.state && (
                 <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
@@ -612,6 +798,24 @@ const AttendanceForm = ({ onRegistration }: AttendanceFormProps) => {
                         className="rounded-2xl shadow-2xl"
                         onClick={(e) => e.stopPropagation()}
                     >
+                        {/* Background Selector Thumbnails */}
+                        <div className="flex gap-2 justify-center mb-3 pt-3">
+                            <img 
+                                src="/idcard_bg1.jpeg" 
+                                alt="Background 1" 
+                                className="cursor-pointer border-2 hover:border-yellow-400 transition-all"
+                                style={{ width: '40px', height: '40px', objectFit: 'cover' }}
+                                onClick={() => setBackgroundImage('/idcard_bg1.jpeg')}
+                            />
+                            <img 
+                                src="/idcard_bg2.jpeg" 
+                                alt="Background 2" 
+                                className="cursor-pointer border-2 hover:border-yellow-400 transition-all"
+                                style={{ width: '40px', height: '40px', objectFit: 'cover' }}
+                                onClick={() => setBackgroundImage('/idcard_bg2.jpeg')}
+                            />
+                        </div>
+                        
                         {/* Attendance Card Preview */}
                         <div
                             id="attendance-card"
@@ -619,7 +823,7 @@ const AttendanceForm = ({ onRegistration }: AttendanceFormProps) => {
                             style={{
                                 width: '352px',
                                 height: '440px',
-                                backgroundImage: 'url(/idcard_bg1.jpeg)',
+                                backgroundImage: `url(${backgroundImage})`,
                                 backgroundSize: 'contain',
                                 backgroundPosition: 'center',
                             }}
@@ -651,7 +855,7 @@ const AttendanceForm = ({ onRegistration }: AttendanceFormProps) => {
                                             src={formData.photoUrl} 
                                             alt="Member Photo" 
                                             className="object-cover"
-                                            style={{width: '100px', height: '100px', position: 'relative', left: '1.8rem', top: '-3rem', border: '2px solid #fbbf24' }} 
+                                            style={{width: '90px', height: '90px', position: 'relative', left: '1.8rem', top: '-3rem', border: '2px solid #fbbf24' }} 
                                         />
                                     </div>
                                     
@@ -667,7 +871,7 @@ const AttendanceForm = ({ onRegistration }: AttendanceFormProps) => {
                                 <div className="grid grid-cols-2 gap-2 px-4">
                                     
                                     <div className="text-white text-sm font-bold text-center">
-                                        {formData.district}
+                                        {formData.district || formData.state}
                                     </div>
                                 </div>
                                 </div>
